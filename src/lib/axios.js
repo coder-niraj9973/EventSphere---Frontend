@@ -16,4 +16,5 @@ api.interceptors.response.use(
         return response.data.data
 
 }, (error) => { })
+
 export default api;

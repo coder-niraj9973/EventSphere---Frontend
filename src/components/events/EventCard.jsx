@@ -1,9 +1,16 @@
 import { formatEventDate, formatPrice } from '@/lib/utils';
+import { toggleFavorites } from '@/store/slices/favoriteSlice';
 import { Bookmark, Calendar } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router';
 
-export default function EventCards ({event}) {
-  const {city, id, format, currency, price, startDate, title, image,slug,  category :{name}} = event
+export default function EventCards({ event }) {
+  const { city, id, format, currency, price, startDate, title, image, slug, category: { name } } = event
+
+  const dispatch = useDispatch()
+  const state = useSelector((state) => state.favorites.name)
+
+
   return (
     <Link
       to={`/events/${slug}`}
@@ -26,10 +33,14 @@ export default function EventCards ({event}) {
 
             {/* Bookmark button */}
             <button
+              onClick={(e) => {
+                e.preventDefault()
+                dispatch(toggleFavorites("dhruv"))
+              }}
               type="button"
               className="pointer-events-auto w-8 h-8 rounded-full bg-white/90 backdrop-blur-md shadow-sm border border-black/5 flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all text-stone-700 hover:text-stone-900 cursor-pointer text-xs"
             >
-              <Bookmark/>
+              <Bookmark />
             </button>
           </div>
         </div>
@@ -38,7 +49,7 @@ export default function EventCards ({event}) {
         <div className="p-4 space-y-2">
           {/* Date & Location */}
           <div className="flex items-center gap-2 text-xs font-semibold text-[#C2410C]">
-            <Calendar className='w-4 h-4'/>
+            <Calendar className='w-4 h-4' />
             <span>{formatEventDate(startDate)}</span>
             <span className="text-stone-300 font-normal">•</span>
             <span className="text-stone-500 font-normal truncate">{city}</span>
@@ -54,7 +65,7 @@ export default function EventCards ({event}) {
       {/* Clean Bottom Meta: Format & Price */}
       <div className="px-4 pb-4 pt-3 border-t border-[#F2EFE8] flex items-center justify-between text-xs mt-1">
         <span className="capitalize text-stone-500 font-medium">
-         {format}
+          {format}
         </span>
         <span className="text-sm font-bold text-stone-900">
           {formatPrice(price, currency)}
